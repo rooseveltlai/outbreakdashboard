@@ -2,6 +2,7 @@
    .oj-flex-items-pad {margin-bottom: 35px}
    h3 {font-weight: bold}
    #selectRegion input {font-weight: bold;font-size:16px}
+   h3 span {font-weight: 100}
  </style>
 <div class="oj-flex-items-pad">
   <div class="oj-flex oj-md-align-items-left">
@@ -77,7 +78,7 @@
         </oj-chart>
       </div>
       <div class="oj-md-6 oj-flex-item">
-        <h3>Daily New Case / Daily Tests [<span data-bind="text: latestNum('totalTestResultsIncrease')"></span>]</h3>
+        <h3>Daily New Case / Daily Tests [<span data-bind="text: latestNum('newPositivePct')"></span>]</h3>
         <p>Percentage of positives out of all tests in a day, a key metric to evaluate the trend</p>
         <oj-chart id="comboChart3" type="combo" selection-mode="none" data="[[dataProviderDailyNewCasePct]]"
           animation-on-display="auto" animation-on-data-change="auto" hover-behavior="dim" style="width:100%;" legend.position="bottom"
@@ -100,7 +101,7 @@
 
     <div class="oj-flex oj-flex-items-pad">
       <div class="oj-md-4 oj-flex-item">
-        <h3>Total Cases [<span data-bind="text: latestNum('totalTestResultsIncrease')"></span>]</h3>
+        <h3>Total Cases [<span data-bind="text: latestNum('positive')"></span>]</h3>
         <p>Total cumulative positve cases</p>
         <oj-chart id="comboChart3" type="combo" selection-mode="none" data="[[dataProviderTotalCases]]" animation-on-display="auto"
           animation-on-data-change="auto" hover-behavior="dim" style="width:100%;" legend.position="bottom" time-axis-type="enabled"
@@ -119,7 +120,7 @@
         </oj-chart>
       </div>
       <div class="oj-md-4 oj-flex-item">
-        <h3>Total Death [<span data-bind="text: latestNum('totalTestResultsIncrease')"></span>]</h3>
+        <h3>Total Death [<span data-bind="text: latestNum('death')"></span>]</h3>
         <p>Total cumulative death</p>
         <oj-chart id="comboChart6" type="combo" selection-mode="none" data="[[dataProviderTotalDeath]]" animation-on-display="auto"
           animation-on-data-change="auto" hover-behavior="dim" style="width:100%;" legend.position="bottom" time-axis-type="enabled"
@@ -138,7 +139,7 @@
         </oj-chart>
       </div>
       <div class="oj-md-4 oj-flex-item">
-        <h3>Total Tests [<span data-bind="text: latestNum('totalTestResultsIncrease')"></span>]</h3>
+        <h3>Total Tests [<span data-bind="text: latestNum('totalTestResults')"></span>]</h3>
         <p>Total cumulative tests</p>
         <oj-chart id="comboChart" type="combo" selection-mode="none" data="[[dataProviderTotalTests]]" animation-on-display="auto"
           animation-on-data-change="auto" hover-behavior="dim" style="width:100%;" legend.position="bottom" time-axis-type="enabled"
@@ -160,7 +161,7 @@
     
     <div class="oj-flex oj-flex-items-pad">
       <div class="oj-md-6 oj-flex-item">
-        <h3>Daily New Cases / Total Cases [<span data-bind="text: latestNum('totalTestResultsIncrease')"></span>]</h3>
+        <h3>Daily New Cases / Total Cases [<span data-bind="text: latestNum('newPositivePctTotal')"></span>]</h3>
         <p>Percentage of new daily postive tests in all cumulative cases</p>
         <oj-chart id="comboChart" type="combo" selection-mode="none" data="[[dataProviderDailyNewCasePctTotal]]"
           animation-on-display="auto" animation-on-data-change="auto" hover-behavior="dim" style="width:100%;" legend.position="bottom"
@@ -179,7 +180,7 @@
         </oj-chart>
       </div>
       <div class="oj-md-6 oj-flex-item">
-        <h3>Death Rate - Total Death / Total Cases [<span data-bind="text: latestNum('totalTestResultsIncrease')"></span>]</h3>
+        <h3>Death Rate - Total Death / Total Cases [<span data-bind="text: latestNum('deathRate')"></span>]</h3>
         <p>Percentage of death cases within all positive tests</p>
         <oj-chart id="comboChart6" type="combo" selection-mode="none" data="[[dataProviderDeathRate]]" animation-on-display="auto"
           animation-on-data-change="auto" hover-behavior="dim" style="width:100%;" legend.position="bottom" time-axis-type="enabled"
@@ -201,7 +202,7 @@
 
     <div class="oj-flex oj-flex-items-pad">
       <div class="oj-md-4 oj-flex-item">
-        <h3>Daily New Hospitalized [<span data-bind="text: latestNum('totalTestResultsIncrease')"></span>]</h3>
+        <h3>Daily New Hospitalized [<span data-bind="text: latestNum('hospitalizedIncrease')"></span>]</h3>
         <p>Reported added hospitalization in a day</p>
         <oj-chart id="comboChart5" type="combo" selection-mode="none" data="[[dataProviderDailyNewHospitalized]]"
           animation-on-display="auto" animation-on-data-change="auto" hover-behavior="dim" style="width:100%;"
@@ -219,7 +220,7 @@
         </oj-chart>
       </div>
       <div class="oj-md-4 oj-flex-item">
-        <h3>Currently Hospitalized [<span data-bind="text: latestNum('totalTestResultsIncrease')"></span>]</h3>
+        <h3>Currently Hospitalized [<span data-bind="text: latestNum('hospitalizedCurrently')"></span>]</h3>
         <p>Total hospitalization - total discharged</p>
         <oj-chart id="comboChart6" type="combo" selection-mode="none" data="[[dataProviderCurrentlyHospitalized]]"
           animation-on-display="auto" animation-on-data-change="auto" hover-behavior="dim" style="width:100%;"
