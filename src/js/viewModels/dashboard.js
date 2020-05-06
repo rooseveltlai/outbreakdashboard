@@ -39,7 +39,7 @@ define(['../appController', 'knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarra
        * after being disconnected.
        */
       self.connected = function () {
-        document.title = 'Dashboard'
+        document.title = 'Dashboard - Coronavirus Outbreak Dashboard'
         loadState()
       }
 
@@ -144,19 +144,19 @@ define(['../appController', 'knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarra
         let url = `https://covidtracking.com/api/v1/${state != 'us' ? ('states/' + state) : state}/daily.json`
         $.getJSON(url, function (data) {
           data = preprocessData(data)
-          extractChartData(data, 'positiveIncrease', self.dailyNewCases, self.dailyNewCasesSMA, 'Daily New Cases', '5 Day Moving Average')
-          extractChartData(data, 'totalTestResultsIncrease', self.dailyNewTests, self.dailyNewTestsSMA, 'Daily New Tests', '5 Day Moving Average')
-          extractChartData(data, 'newPositivePct', self.dailyNewCasePct, self.dailyNewCasePctSMA, 'Daily New Cases / New Tests', '5 Day Moving Average')
-          extractChartData(data, 'newPositivePctTotal', self.dailyNewCasePctTotal, self.dailyNewCasePctTotalSMA, 'Daily New Cases / Total Cases', '5 Day Moving Average')
-          extractChartData(data, 'deathIncrease', self.dailyNewDeath, self.dailyNewDeathSMA, 'Daily New Death', '5 Day Moving Average')
-          extractChartData(data, 'deathRate', self.dailyDeathRate, self.dailyDeathRateSMA, 'Death Rate', '5 Day Moving Average')
-          extractChartData(data, 'hospitalizedIncrease', self.dailyNewHospitalized, self.dailyNewHospitalizedSMA, 'Daily New Hospitalized', '5 Day Moving Average')
-          extractChartData(data, 'hospitalizedCurrently', self.hospitalizedCurrently, self.hospitalizedCurrentlySMA, 'Currently Hospitalized', '5 Day Moving Average')
-          extractChartData(data, 'inIcuCurrently', self.inICUCurrently, self.inICUCurrentlySMA, 'Currently In ICU', '5 Day Moving Average')
+          extractChartData(data, 'positiveIncrease', self.dailyNewCases, self.dailyNewCasesSMA, 'Daily New Cases', '7 day Moving Average')
+          extractChartData(data, 'totalTestResultsIncrease', self.dailyNewTests, self.dailyNewTestsSMA, 'Daily New Tests', '7 day Moving Average')
+          extractChartData(data, 'newPositivePct', self.dailyNewCasePct, self.dailyNewCasePctSMA, 'Daily New Cases / New Tests', '7 day Moving Average')
+          extractChartData(data, 'newPositivePctTotal', self.dailyNewCasePctTotal, self.dailyNewCasePctTotalSMA, 'Daily New Cases / Total Cases', '7 day Moving Average')
+          extractChartData(data, 'deathIncrease', self.dailyNewDeath, self.dailyNewDeathSMA, 'Daily New Death', '7 day Moving Average')
+          extractChartData(data, 'deathRate', self.dailyDeathRate, self.dailyDeathRateSMA, 'Death Rate', '7 day Moving Average')
+          extractChartData(data, 'hospitalizedIncrease', self.dailyNewHospitalized, self.dailyNewHospitalizedSMA, 'Daily New Hospitalized', '7 day Moving Average')
+          extractChartData(data, 'hospitalizedCurrently', self.hospitalizedCurrently, self.hospitalizedCurrentlySMA, 'Currently Hospitalized', '7 day Moving Average')
+          extractChartData(data, 'inIcuCurrently', self.inICUCurrently, self.inICUCurrentlySMA, 'Currently In ICU', '7 day Moving Average')
 
-          extractChartData(data, 'positive', self.totalCases, self.totalCasesSMA, 'Total Cases', '5 Day Moving Average')
-          extractChartData(data, 'totalTestResults', self.totalTests, self.totalTestsSMA, 'Total Tests', '5 Day Moving Average')
-          extractChartData(data, 'death', self.totalDeath, self.totalDeathSMA, 'Total Death', '5 Day Moving Average')
+          extractChartData(data, 'positive', self.totalCases, self.totalCasesSMA, 'Total Cases', '7 day Moving Average')
+          extractChartData(data, 'totalTestResults', self.totalTests, self.totalTestsSMA, 'Total Tests', '7 day Moving Average')
+          extractChartData(data, 'death', self.totalDeath, self.totalDeathSMA, 'Total Death', '7 day Moving Average')
 
           /* chart data */
           self.chartDataDailyNewCases.removeAll()
@@ -222,13 +222,16 @@ function extractChartData (data, dataProp, seriesArray, seriesSMAArray, seriesNa
   for (let i = data.length - 1; i >= 0; i--) {
     if (data[i][dataProp] == null) continue
     let sma = -1
-    if (i < data.length - 4) {
-      if (data[i + 1][dataProp] != null && data[i + 2][dataProp] != null && data[i + 3][dataProp] != null && data[i + 4][dataProp] != null) {
+    if (i < data.length - 6) {
+      if (data[i + 1][dataProp] != null && data[i + 2][dataProp] != null && data[i + 3][dataProp] != null && data[i + 4][dataProp] != null
+          && data[i + 5][dataProp] != null && data[i + 6][dataProp] != null) {
         sma = (data[i][dataProp] +
           data[i + 1][dataProp] +
           data[i + 2][dataProp] +
           data[i + 3][dataProp] +
-          data[i + 4][dataProp]) / 5
+          data[i + 4][dataProp] +
+          data[i + 5][dataProp] +
+          data[i + 6][dataProp]) / 7
       }
     }
     seriesArray.push({

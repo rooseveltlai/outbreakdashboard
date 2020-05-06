@@ -65,7 +65,7 @@ define(['../appController','knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarray
        * after being disconnected.
        */
       self.connected = function () {
-        document.title = 'Trends'
+        document.title = 'Trends - Coronavirus Outbreak Dashboard'
         loadState()
       }
 
@@ -93,88 +93,57 @@ define(['../appController','knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarray
        * That includes any possible animation between the old and the new View.
        */
       self.transitionCompleted = function () {
-        self.stateSelected(['CA','TX','FL','IL','WA', 'GA'])
+        let saved = getCookie('outbreak_states')
+        if (saved) 
+          saved = JSON.parse(saved)
+        else
+          saved = ['CA', 'TX', 'FL']
+        self.stateSelected(saved)
       }
 
-      self.latestValue = ko.pureComputed(function () {
-        let size = self.chartDataDailyNewCases().length
-        if (size) {
-          return self.chartDataDailyNewCases()[size - 1].value
-        } else {
-          return 0
-        }
-      })
-
-      self.movingAverageEnabled.subscribe(function() {
-        redrawStates(self.stateSelected())
-      })
+      self.movingAverageEnabled.subscribe(function(val) {
+        setTimeout(function() {
+          self.stateSelected().forEach(s => {
+            clearState(s)
+            renderChartsByState(s, val)
+          })
+        }, 10)
+      })  
 
       self.valueChangedHandler = function (event) {
+
+        let prev = event.detail.previousValue
         let states = event.detail.value
-        redrawStates(states)
+
+        setCookie('outbreak_states', JSON.stringify(states), 356);
+
+        if (prev && prev.length > 0) {
+          removed = prev.filter(s => states.indexOf(s) < 0)
+          if (removed) removed.forEach(s => clearState(s))
+        }
+
+        added = states.filter(s => prev.indexOf(s) < 0)
+        redrawStates(added)
       }
 
-      redrawStates = function (states) {
+      var clearState = function (state) {
+        self.DataDailyNewCases.remove( d => {return d.series.startsWith(state)})
+        self.DataDailyNewCases.remove(d => { return d.series.startsWith(state) })
+        self.DataDailyNewCasePct.remove(d => { return d.series.startsWith(state) })
+        self.DataDailyNewDeath.remove(d => { return d.series.startsWith(state) })
+        self.DataDailyTests.remove(d => { return d.series.startsWith(state) })
+        self.DataDeathRate.remove(d => { return d.series.startsWith(state) })
+        self.DataTotalCases.remove(d => { return d.series.startsWith(state) })
+        self.DataTotalTests.remove(d => { return d.series.startsWith(state) })
+        self.DataTotalDeath.remove(d => { return d.series.startsWith(state) })
+      }
+
+      var redrawStates = function (states) {
         app.loading(true)
-
-        self.DataDailyNewCases.removeAll()
-        self.chartDataDailyNewCases = {}
-        
-        self.chartDataDailyTests = {}
-        self.DataDailyTests.removeAll()
-
-        self.chartDataDailyNewCasePct = {}
-        self.DataDailyNewCasePct.removeAll()
-
-        self.chartDataDailyNewDeath = {}
-        self.DataDailyNewDeath.removeAll()
-
-        self.chartDataDeathRate = {}
-        self.DataDeathRate.removeAll()
-
-        self.chartDataTotalCases = {}
-        self.DataTotalCases.removeAll()
-
-        self.chartDataTotalTests = {}
-        self.DataTotalTests.removeAll()
-
-        self.chartDataTotalDeath = {}
-        self.DataTotalDeath.removeAll()
-
         let promises = []
         states.forEach(s => promises.push(loadCharts(s)))
 
-        let compare = function (a, b) {
-          if (a.date > b.date) return 1;
-          if (b.date > a.date) return -1;
-          return 0;
-        }
-
-        let sortSeries = function (series) {
-          let arr = []
-          for (p in series) {
-            arr.push({state: p, date: series[p][0].group})
-          }
-          return arr.sort(compare)
-        }
-
-        let copySeriesByOrder = function (observable, seriesObj) {
-          let sortedStates = sortSeries(seriesObj)
-          sortedStates.forEach(s => {
-            ko.utils.arrayPushAll(observable, seriesObj[s.state])
-          })
-        }
-
-
         $.when.apply(null, promises).done(function() {
-          copySeriesByOrder(self.DataDailyNewCases, self.chartDataDailyNewCases)
-          copySeriesByOrder(self.DataDailyNewCasePct, self.chartDataDailyNewCasePct)
-          copySeriesByOrder(self.DataDailyNewDeath, self.chartDataDailyNewDeath)
-          copySeriesByOrder(self.DataDailyTests, self.chartDataDailyTests)
-          copySeriesByOrder(self.DataDeathRate, self.chartDataDeathRate)
-          copySeriesByOrder(self.DataTotalCases, self.chartDataTotalCases)
-          copySeriesByOrder(self.DataTotalTests, self.chartDataTotalTests)
-          copySeriesByOrder(self.DataTotalDeath, self.chartDataTotalDeath)
           app.loading(false)
         })
       }
@@ -214,15 +183,17 @@ define(['../appController','knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarray
           let totalTests = []
           let totalDeath = []
 
+          console.time('loadCharts-' + state)
+
           data = preprocessData(data)
-          extractChartData(data, 'positiveIncrease', dailyNewCases, state + ' Daily New Cases', state + ' 5 Day Moving Average')
-          extractChartData(data, 'totalTestResultsIncrease', dailyNewTests, state + ' Daily New Tests', state + ' 5 Day Moving Average')
-          extractChartData(data, 'newPositivePct', dailyNewCasePct, state + ' Daily New Cases / New Tests', state + ' 5 Day Moving Average')
-          extractChartData(data, 'deathIncrease', dailyNewDeath, state + ' Daily New Death', state + ' 5 Day Moving Average')
-          extractChartData(data, 'deathRate', dailyDeathRate, state + ' Death Rate', state + ' 5 Day Moving Average')
-          extractChartData(data, 'positive', totalCases, state + ' Total Cases', state + ' 5 Day Moving Average')
-          extractChartData(data, 'totalTestResults', totalTests, state + ' Total Tests', state + ' 5 Day Moving Average')
-          extractChartData(data, 'death', totalDeath, state + ' Total Death', state + ' 5 Day Moving Average')
+          extractChartData(data, 'positiveIncrease', dailyNewCases, state + ' Daily New Cases', state + ' 7 Day Moving Average')
+          extractChartData(data, 'totalTestResultsIncrease', dailyNewTests, state + ' Daily New Tests', state + ' 7 Day Moving Average')
+          extractChartData(data, 'newPositivePct', dailyNewCasePct, state + ' Daily New Cases / New Tests', state + ' 7 Day Moving Average')
+          extractChartData(data, 'deathIncrease', dailyNewDeath, state + ' Daily New Death', state + ' 7 Day Moving Average')
+          extractChartData(data, 'deathRate', dailyDeathRate, state + ' Death Rate', state + ' 7 Day Moving Average')
+          extractChartData(data, 'positive', totalCases, state + ' Total Cases', state + ' 7 Day Moving Average')
+          extractChartData(data, 'totalTestResults', totalTests, state + ' Total Tests', state + ' 7 Day Moving Average')
+          extractChartData(data, 'death', totalDeath, state + ' Total Death', state + ' 7 Day Moving Average')
 
           /* chart data */
           self.chartDataDailyNewCases[state] = dailyNewCases
@@ -257,13 +228,31 @@ define(['../appController','knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarray
             viewportStartGroup: start2,
             viewportEndGroup: today
           })
+
+          renderChartsByState(state)
+
+          console.timeEnd("loadCharts-" + state)
         })
       }
 
 
+      var renderChartsByState = function(state, movingAvg) {
+        let mv = movingAvg == undefined ? self.movingAverageEnabled() : movingAvg
+        let col = mv ? 1 : 0
+        ko.utils.arrayPushAll(self.DataDailyNewCases, self.chartDataDailyNewCases[state][col])
+        ko.utils.arrayPushAll(self.DataDailyNewCasePct, self.chartDataDailyNewCasePct[state][col])
+        ko.utils.arrayPushAll(self.DataDailyNewDeath, self.chartDataDailyNewDeath[state][col])
+        ko.utils.arrayPushAll(self.DataDailyTests, self.chartDataDailyTests[state][col])
+        ko.utils.arrayPushAll(self.DataDeathRate, self.chartDataDeathRate[state][col])
+        ko.utils.arrayPushAll(self.DataTotalCases, self.chartDataTotalCases[state][col])
+        ko.utils.arrayPushAll(self.DataTotalTests, self.chartDataTotalTests[state][col])
+        ko.utils.arrayPushAll(self.DataTotalDeath, self.chartDataTotalDeath[state][col])
+      }
+
       /////////////////// utilies //////////////////
 
       var EarliestDate = {}
+      var EarliestDateSMA = {}
 
       function dateToISO(date) {
         let dateStr = date.toString()
@@ -273,6 +262,11 @@ define(['../appController','knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarray
       function extractChartData(data, dataProp, seriesArray, seriesName, seriesSMAName) {
         let i = data.length
         let earliest = 30000000
+        let earliestSMA = 30000000
+
+        seriesArray[0] = []
+        seriesArray[1] = []
+
         for (let i = data.length - 1; i >= 0; i--) {
           if (data[i][dataProp] == null) continue
 
@@ -280,31 +274,34 @@ define(['../appController','knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarray
           // we throw away any data earlier than the earliest of first series
 
           let sma = -1
-          if (i < data.length - 4) {
-            if (typeof data[i + 1][dataProp] == 'number' && typeof data[i + 2][dataProp] == 'number' && typeof data[i + 3][dataProp] == 'number' && typeof data[i + 4][dataProp] == 'number') {
+          if (i < data.length - 6) {
+            if (typeof data[i + 1][dataProp] == 'number' && typeof data[i + 2][dataProp] == 'number' && typeof data[i + 3][dataProp] == 'number' && typeof data[i + 4][dataProp] == 'number'
+                  && typeof data[i + 5][dataProp] == 'number' && typeof data[i + 6][dataProp] == 'number'){
               sma = (data[i][dataProp] +
                 data[i + 1][dataProp] +
                 data[i + 2][dataProp] +
                 data[i + 3][dataProp] +
-                data[i + 4][dataProp]) / 5
+                data[i + 4][dataProp] +
+                data[i + 5][dataProp] +
+                data[i + 6][dataProp]) / 7
             }
           }
 
-          if (!self.movingAverageEnabled()) {
-            //if (EarliestDate[dataProp] != undefined && data[i]['date'] < EarliestDate[dataProp]) continue
-            //if (data[i]['date'] < earliest) earliest = data[i]['date']
-            seriesArray.push({
+          if (EarliestDate[dataProp] == undefined || data[i]['date'] >= EarliestDate[dataProp]) {
+            if (data[i]['date'] < earliest) earliest = data[i]['date']
+            seriesArray[0].push({
               id: data[i].hash,
               series: seriesName,
               group: dateToISO(data[i].date) + 'T12:00:00Z',
               value: data[i][dataProp],
               label: i == 0 ? seriesName.split(' ')[0] : null
             })
-          } else {
-            if (sma > -1) {
-              //if (EarliestDate[dataProp] != undefined && data[i]['date'] < EarliestDate[dataProp]) continue
-              //if (data[i]['date'] < earliest) earliest = data[i]['date']
-              seriesArray.push({
+          }
+
+          if (sma > -1) {
+            if (EarliestDateSMA[dataProp] == undefined || data[i]['date'] >= EarliestDateSMA[dataProp]) {
+              if (data[i]['date'] < earliestSMA) earliestSMA = data[i]['date']
+              seriesArray[1].push({
                 id: data[i].hash,
                 series: seriesSMAName,
                 group: dateToISO(data[i].date) + 'T12:00:00Z',
@@ -315,7 +312,8 @@ define(['../appController','knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarray
           }
         }
 
-        //if (EarliestDate[dataProp] == undefined) EarliestDate[dataProp] = earliest
+        if (EarliestDate[dataProp] == undefined) EarliestDate[dataProp] = earliest
+        if (EarliestDateSMA[dataProp] == undefined) EarliestDateSMA[dataProp] = earliestSMA
       }
 
       function preprocessData(data) {
@@ -336,6 +334,27 @@ define(['../appController','knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarray
             d.deathRate = Math.round(d.death / d.positive * 1000) / 1000
         })
         return data
+      }
+
+      function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+          expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+      }
+
+      function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
       }
 
     }

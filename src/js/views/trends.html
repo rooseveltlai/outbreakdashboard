@@ -24,12 +24,12 @@
       <div class="oj-md-6 oj-flex-item">
         <h3>Daily New Cases</h3>
         <div style="float:right;margin-top:-15px">
-          5-Day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 5-day Moving Average"></oj-switch>
+          7-day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 7-day Moving Average"></oj-switch>
         </div>
         <p>Positive cases reported for a day</p>
         <oj-chart id="lineChart" type="line" selection-mode="none" data="[[dataProviderDailyNewCases]]"
           animation-on-display="auto" animation-on-data-change="auto" hover-behavior="dim" style="width:98%;"
-          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="on" overview.height="25"
+          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="off" overview.height="25"
           x-axis="[[xAxisOptions]]" hide-and-show-behavior="withRescale" style-defaults.data-label-style='{"fontStyle": "italic", "fontSize": "8px"}'>
 
           <template slot="itemTemplate" data-oj-as="item">
@@ -43,12 +43,12 @@
       <div class="oj-md-6 oj-flex-item">
         <h3>Daily Death</h3>
         <div style="float:right;margin-top:-15px">
-          5-Day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 5-day Moving Average"></oj-switch>
+          7-day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 7-day Moving Average"></oj-switch>
         </div>
         <p>Death related to Covid-19 reported for a day</p>
         <oj-chart id="lineChart2" type="line" selection-mode="none" data="[[dataProviderDailyNewDeath]]"
           animation-on-display="auto" animation-on-data-change="auto" hover-behavior="dim" style="width:98%;"
-          legend.position="bottom" time-axis-type="enabled"  zoom-and-scroll="liveScrollOnly" overview.rendered="on"  overview.height="25"
+          legend.position="bottom" time-axis-type="enabled"  zoom-and-scroll="liveScrollOnly" overview.rendered="off"  overview.height="25"
            hide-and-show-behavior="withRescale" x-axis="[[xAxisOptions]]" style-defaults.data-label-style='{"fontStyle": "italic", "fontSize": "8px"}'>
       
           <template slot="itemTemplate" data-oj-as="item">
@@ -63,13 +63,13 @@
       <div class="oj-md-6 oj-flex-item">
         <h3>Daily New Tests</h3>
         <div style="float:right;margin-top:-15px">
-          5-Day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 5-day Moving Average">
+          7-day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 7-day Moving Average">
           </oj-switch>
         </div>
         <p>Tests (negative + positive) reported for a day</p>
         <oj-chart id="lineChart2" type="line" selection-mode="none" data="[[dataProviderDailyNewTests]]"
           animation-on-display="auto" animation-on-data-change="auto" hover-behavior="dim" style="width:98%;"
-          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="on"
+          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="off"
           overview.height="25" hide-and-show-behavior="withRescale" x-axis="[[xAxisOptions]]" style-defaults.data-label-style='{"fontStyle": "italic", "fontSize": "8px"}'>
       
           <template slot="itemTemplate" data-oj-as="item">
@@ -83,13 +83,13 @@
       <div class="oj-md-6 oj-flex-item">
         <h3>Daily New Case / Daily Tests</h3>
         <div style="float:right;margin-top:-15px">
-          5-Day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 5-day Moving Average">
+          7-day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 7-day Moving Average">
           </oj-switch>
         </div>
         <p>Percentage of positives out of all tests in a day, a key metric to evaluate the trend</p>
         <oj-chart id="lineChart2" type="line" selection-mode="none" data="[[dataProviderDailyNewCasePct]]"
           animation-on-display="auto" animation-on-data-change="auto" hover-behavior="dim" style="width:98%;"
-          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="on"
+          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="off"
           overview.height="25" hide-and-show-behavior="withRescale" x-axis="[[xAxisOptions2]]" style-defaults.data-label-style='{"fontStyle": "italic", "fontSize": "8px"}'>
       
           <template slot="itemTemplate" data-oj-as="item">
@@ -103,13 +103,13 @@
       <div class="oj-md-6 oj-flex-item">
         <h3>Death Rate - Total Death / Total Cases</h3>
         <div style="float:right;margin-top:-15px">
-          5-Day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 5-day Moving Average">
+          7-day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 7-day Moving Average">
           </oj-switch>
         </div>
         <p>Percentage of death cases within all positive tests</p>
         <oj-chart id="lineChart2" type="line" selection-mode="none" data="[[dataProviderDeathRate]]"
           animation-on-display="auto" animation-on-data-change="auto" hover-behavior="dim" style="width:98%;"
-          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="on"
+          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="off"
           overview.height="25" hide-and-show-behavior="withRescale" x-axis="[[xAxisOptions]]" style-defaults.data-label-style='{"fontStyle": "italic", "fontSize": "8px"}'>
       
           <template slot="itemTemplate" data-oj-as="item">
@@ -123,13 +123,13 @@
       <div class="oj-md-6 oj-flex-item">
         <h3>Total Cases</h3>
         <div style="float:right;margin-top:-15px">
-          5-Day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 5-day Moving Average">
+          7-day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 7-day Moving Average">
           </oj-switch>
         </div>
         <p>Total cumulative positve cases</p>
         <oj-chart id="lineChart2" type="line" selection-mode="none" data="[[dataProviderTotalCases]]"
           animation-on-display="auto" animation-on-data-change="auto" hover-behavior="dim" style="width:98%;"
-          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="on"
+          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="off"
           overview.height="25" hide-and-show-behavior="withRescale" x-axis="[[xAxisOptions]]" style-defaults.data-label-style='{"fontStyle": "italic", "fontSize": "8px"}'>
       
           <template slot="itemTemplate" data-oj-as="item">
@@ -143,13 +143,13 @@
       <div class="oj-md-6 oj-flex-item">
         <h3>Total Death</h3>
         <div style="float:right;margin-top:-15px">
-          5-Day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 5-day Moving Average">
+          7-day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 7-day Moving Average">
           </oj-switch>
         </div>
         <p>Total cumulative death</p>
         <oj-chart id="lineChart2" type="line" selection-mode="none" data="[[dataProviderTotalDeath]]"
           animation-on-display="auto" animation-on-data-change="auto" hover-behavior="dim" style="width:98%;"
-          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="on"
+          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="off"
           overview.height="25" hide-and-show-behavior="withRescale" x-axis="[[xAxisOptions]]" style-defaults.data-label-style='{"fontStyle": "italic", "fontSize": "8px"}'>
       
           <template slot="itemTemplate" data-oj-as="item">
@@ -163,13 +163,13 @@
       <div class="oj-md-6 oj-flex-item">
         <h3>Total Tests</h3>
         <div style="float:right;margin-top:-15px">
-          5-Day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 5-day Moving Average">
+          7-day Moving Average: <oj-switch value="{{movingAverageEnabled}}" label-hint="Show 7-day Moving Average">
           </oj-switch>
         </div>
         <p>Total cumulative tests</p>
         <oj-chart id="lineChart2" type="line" selection-mode="none" data="[[dataProviderTotalTests]]"
           animation-on-display="auto" animation-on-data-change="auto" hover-behavior="dim" style="width:98%;"
-          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="on"
+          legend.position="bottom" time-axis-type="enabled" zoom-and-scroll="liveScrollOnly" overview.rendered="off"
           overview.height="25" hide-and-show-behavior="withRescale" x-axis="[[xAxisOptions]]" style-defaults.data-label-style='{"fontStyle": "italic", "fontSize": "8px"}'>
       
           <template slot="itemTemplate" data-oj-as="item">
