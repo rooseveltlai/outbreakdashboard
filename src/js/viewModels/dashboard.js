@@ -40,6 +40,9 @@ define(['../appController', 'knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarra
        */
       self.connected = function () {
         document.title = 'Dashboard - Coronavirus Outbreak Dashboard'
+        const urlParams = new URLSearchParams(window.location.search)
+        const state = urlParams.get('state')
+        if (state) self.stateSelected(state)
         loadState()
       }
 
@@ -192,9 +195,9 @@ define(['../appController', 'knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarra
 
           var dateOptions = { day: 'numeric', month: 'numeric' }
           self.dayMonth = new DateTimeConverter.IntlDateTimeConverter(dateOptions)
-          self.xAxisOptions({ 
-            tickLabel: { converter: [ko.toJS(self.dayMonth)], style: "font-size:10px" }, 
-            viewportStartGroup: start, 
+          self.xAxisOptions({
+            tickLabel: { converter: [ko.toJS(self.dayMonth)], style: 'font-size:10px' },
+            viewportStartGroup: start,
             viewportEndGroup: today
           })
 
@@ -224,7 +227,7 @@ function extractChartData (data, dataProp, seriesArray, seriesSMAArray, seriesNa
     let sma = -1
     if (i < data.length - 6) {
       if (data[i + 1][dataProp] != null && data[i + 2][dataProp] != null && data[i + 3][dataProp] != null && data[i + 4][dataProp] != null
-          && data[i + 5][dataProp] != null && data[i + 6][dataProp] != null) {
+        && data[i + 5][dataProp] != null && data[i + 6][dataProp] != null) {
         sma = (data[i][dataProp] +
           data[i + 1][dataProp] +
           data[i + 2][dataProp] +

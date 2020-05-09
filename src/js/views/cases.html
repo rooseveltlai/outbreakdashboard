@@ -53,6 +53,7 @@
                                                                "className": "oj-sm-only-hide",
                                                                "resizable": "enabled",
                                                                "width": "100",
+                                                               "template": "stateCellTemplate",
                                                                "style": ": normal; white-space: normal;"},
 
 
@@ -138,7 +139,9 @@
                                       </template>
                       </oj-spark-chart>
             </template>
-
+            <template slot="stateCellTemplate" data-oj-as="cell">
+              <a data-bind="attr: { href: '/?root=dashboard&state=' + cell.row.state }, text: cell.data">Open file</a>
+            </template>
         </oj-table>
       </div>
     </div>
