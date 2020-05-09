@@ -1,0 +1,147 @@
+<style>
+  .oj-flex-items-pad {
+    margin-bottom: 35px
+  }
+  h3 {
+    font-weight: bold
+  }
+  h3 span {
+    font-weight: 100
+  }
+
+
+  #table tr:nth-child(odd) {
+    background: #f7f6f5;
+  }
+  #table tr:nth-child(even) {
+    background: #f0ddb6;
+  }
+  #table th {
+    background: #3a3a3a;
+    font-weight: bold;
+    color: white;
+    font-size: 80%
+  }
+  #table td:nth-child(2) {
+    font-weight: bold;
+    font-size: 90%
+  }
+  #table td {
+    font-weight: bold;
+    font-size: 120%
+  }
+  .oj-hover {
+    background-color: inherit;
+  }
+  .oj-table-data-cell.oj-hover {
+    background-color: inherit;
+  }
+</style>
+
+
+<div>
+  <div>
+    <div class="oj-flex oj-flex-items-pad">
+      <div class="oj-md-12 oj-flex-item">
+        <h3>Cases In US and States</h3>
+        <oj-table id='table' aria-label='State Table' data='[[tableDataProvider]]' scroll-policy='loadMoreOnScroll'
+          translations.msg-no-data='Loading...' selection-mode.row='none'
+          scroll-policy-options='{"fetchSize": 60}' columns='[
+                                                              {"headerText": "State", 
+                                                               "field": "stateName",
+                                                               "headerClassName": "oj-sm-only-hide",
+                                                               "className": "oj-sm-only-hide",
+                                                               "resizable": "enabled",
+                                                               "width": "100",
+                                                               "style": ": normal; white-space: normal;"},
+
+
+                                                              {"headerText": "Daily Cases Trend", 
+                                                               "field": "spark",
+                                                               "sortProperty": "deltaDeath",
+                                                               "template": "sparkCellTemplate",
+                                                               "resizable": "enabled",
+                                                               "width": "200"},
+
+                                                              {"headerText": "New Cases", 
+                                                               "field": "deltaPositive",
+                                                               "headerClassName": "oj-sm-only-hide",
+                                                               "className": "oj-sm-only-hide",
+                                                               "resizable": "enabled",
+                                                               "headerStyle": "word-wrap: break-word; white-space: normal;"},  
+
+                                                              {"headerText": "New Death", 
+                                                               "field": "deltaDeath",
+                                                               "headerClassName": "oj-sm-only-hide",
+                                                               "className": "oj-sm-only-hide",
+                                                               "resizable": "enabled",
+                                                               "headerStyle": "word-wrap: break-word; white-space: normal;"},
+
+                                                              {"headerText": "New Tests", 
+                                                               "field": "deltaTest",
+                                                               "headerClassName": "oj-sm-only-hide",
+                                                               "className": "oj-sm-only-hide",
+                                                               "resizable": "enabled",
+                                                               "headerStyle": "word-wrap: break-word; white-space: normal;"},     
+
+                                                              {"headerText": "Latest Positive Rate", 
+                                                               "field": "posTestRateStr",
+                                                               "sortProperty": "posTestRate",
+                                                               "headerClassName": "oj-sm-only-hide",
+                                                               "className": "oj-sm-only-hide",
+                                                               "resizable": "enabled",
+                                                               "headerStyle": "word-wrap: break-word; white-space: normal;"}, 
+                                                               
+                                                              {"headerText": "Total Cases", 
+                                                               "field": "positive",
+                                                               "headerClassName": "oj-sm-only-hide",
+                                                               "className": "oj-sm-only-hide",
+                                                               "resizable": "enabled",
+                                                               "headerStyle": "word-wrap: break-word; white-space: normal;"}, 
+
+                                                              {"headerText": "Total Death", 
+                                                               "field": "death",
+                                                               "headerClassName": "oj-sm-only-hide",
+                                                               "className": "oj-sm-only-hide",
+                                                               "resizable": "enabled",
+                                                               "headerStyle": "word-wrap: break-word; white-space: normal;"}, 
+
+                                                              {"headerText": "Total Tests", 
+                                                               "field": "totalTestResults",
+                                                               "headerClassName": "oj-sm-only-hide",
+                                                               "className": "oj-sm-only-hide",
+                                                               "resizable": "enabled",
+                                                               "headerStyle": "word-wrap: break-word; white-space: normal;"},                                                                
+                                                               
+                                                              {"headerText": "Historical Positive Rate", 
+                                                               "field": "totalPosTestRateStr",
+                                                               "sortProperty": "totalPosTestRate",
+                                                               "headerClassName": "oj-sm-only-hide",
+                                                               "className": "oj-sm-only-hide",
+                                                               "resizable": "enabled",
+                                                               "headerStyle": "word-wrap: break-word; white-space: normal;"},    
+
+                                                              {"headerText": "Death Rate",
+                                                               "field": "deathRateStr",
+                                                               "sortProperty": "deathRate",
+                                                               "headerClassName": "oj-sm-only-hide",
+                                                               "className": "oj-sm-only-hide",
+                                                               "resizable": "enabled",
+                                                               "headerStyle": "word-wrap: break-word; white-space: normal;"}]'
+            style='width: 100%; min-height: 1000px;'>
+            <template slot="sparkCellTemplate" data-oj-as="cell">
+                      <oj-spark-chart type="lineWithArea" data="[[cell.data]]" line-type="curved"
+                        style="width:100%;height:40px;float:left;">
+                                      <template slot="itemTemplate" data-oj-as="item">
+                                        <oj-spark-chart-item value="[[item.data]]">
+                                        </oj-spark-chart-item>
+                                      </template>
+                      </oj-spark-chart>
+            </template>
+
+        </oj-table>
+      </div>
+    </div>
+
+  </div>
+</div>
