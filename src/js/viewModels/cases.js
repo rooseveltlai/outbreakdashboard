@@ -86,14 +86,30 @@ define(['../appController', 'knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarra
           i.deltaPositive = i.positive - prior.positive
           i.deltaDeath = i.death - prior.death
           i.deltaTest = i.totalTestResults - prior.totalTestResults
-          i.posTestRate = Math.round(i.deltaPositive / i.deltaTest * 1000) / 1000
-          i.posTestRateStr = (Math.round(i.deltaPositive / i.deltaTest * 1000) / 10) + '%'
 
-          i.totalPosTestRate = Math.round(i.positive / i.totalTestResults * 1000) / 1000
-          i.totalPosTestRateStr = (Math.round(i.positive / i.totalTestResults * 1000) / 10) + '%'
+          if (i.deltaTest) {
+            i.posTestRate = Math.round(i.deltaPositive / i.deltaTest * 1000)
+            i.posTestRateStr = (Math.round(i.deltaPositive / i.deltaTest * 1000) / 10) + '%'
+          } else {
+            i.posTestRate = 0
+            i.posTestRateStr = '-'
+          }
 
-          i.deathRate = Math.round(i.death / i.positive * 1000) / 1000
-          i.deathRateStr = (Math.round(i.death / i.positive * 1000) / 10) + '%'
+          if (i.totalTestResults) {
+            i.totalPosTestRate = Math.round(i.positive / i.totalTestResults * 1000)
+            i.totalPosTestRateStr = (Math.round(i.positive / i.totalTestResults * 1000) / 10) + '%'
+          } else {
+            i.totalPosTestRate = 0
+            i.totalPosTestRateStr = '-'
+          }
+
+          if (i.positive) {
+            i.deathRate = Math.round(i.death / i.positive * 1000)
+            i.deathRateStr = (Math.round(i.death / i.positive * 1000) / 10) + '%'
+          } else {
+            i.deathRate = 0
+            i.deathRateStr = '-'
+          }
 
           i.series = dailyPositiveMap[i.state]
           i.stateName = STATES[i.state]
