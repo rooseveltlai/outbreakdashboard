@@ -130,7 +130,7 @@
                       </oj-spark-chart>
             </template>
             <template slot="stateCellTemplate" data-oj-as="cell">
-              <a data-bind="attr: { href: '/?root=dashboard&state=' + cell.row.state }, text: cell.data">Open file</a>
+              <a data-bind="attr: { href: '/?root=dashboard&state=' + cell.row.state }, text: ((cell.index + 1)+ '. ' + cell.data)"></a>
             </template>
         </oj-table>
       </div>

@@ -87,7 +87,7 @@ define(['../appController', 'knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarra
           i.deltaDeath = i.death - prior.death
           i.deltaTest = i.totalTestResults - prior.totalTestResults
 
-          if (i.deltaTest) {
+          if (i.deltaTest && i.deltaPositive < i.deltaTest) {
             i.posTestRate = Math.round(i.deltaPositive / i.deltaTest * 1000)
             i.posTestRateStr = (Math.round(i.deltaPositive / i.deltaTest * 1000) / 10) + '%'
           } else {
@@ -95,7 +95,7 @@ define(['../appController', 'knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarra
             i.posTestRateStr = '-'
           }
 
-          if (i.totalTestResults) {
+          if (i.totalTestResults && i.positive < i.totalTestResults) {
             i.totalPosTestRate = Math.round(i.positive / i.totalTestResults * 1000)
             i.totalPosTestRateStr = (Math.round(i.positive / i.totalTestResults * 1000) / 10) + '%'
           } else {
@@ -103,7 +103,7 @@ define(['../appController', 'knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarra
             i.totalPosTestRateStr = '-'
           }
 
-          if (i.positive) {
+          if (i.positive && i.death < i.positive) {
             i.deathRate = Math.round(i.death / i.positive * 1000)
             i.deathRateStr = (Math.round(i.death / i.positive * 1000) / 10) + '%'
           } else {
