@@ -172,7 +172,7 @@ define(['../appController','knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarray
       }
 
       function loadCharts (state) {
-        let url = `https://covidtracking.com/api/v1/${state != 'US' ? ('states/' + state) : 'us'}/daily.json`
+        let url = `https://covidtracking.com/api/v1/${state != 'US' ? ('states.toLowerCase()/' + state.toLowerCase()) : 'us'}/daily.json`
         return $.getJSON(url, function (data) {
           let dailyNewCases = []
           let dailyNewTests = []
@@ -268,7 +268,7 @@ define(['../appController','knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarray
         seriesArray[1] = []
 
         for (let i = data.length - 1; i >= 0; i--) {
-          if (data[i][dataProp] == null) continue
+          if (data[i][dataProp] == null || !data[i].date) continue
 
           // a bug in OJET can't have data earlier than the first series of data shown
           // we throw away any data earlier than the earliest of first series

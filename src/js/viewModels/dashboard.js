@@ -144,7 +144,7 @@ define(['../appController', 'knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarra
         self.totalDeath = []
         self.totalDeathSMA = []
 
-        let url = `https://covidtracking.com/api/v1/${state != 'us' ? ('states/' + state) : state}/daily.json`
+        let url = `https://covidtracking.com/api/v1/${state != 'us' ? ('states/' + state.toLowerCase()) : state.toLowerCase()}/daily.json`
         $.getJSON(url, function (data) {
           data = preprocessData(data)
           extractChartData(data, 'positiveIncrease', self.dailyNewCases, self.dailyNewCasesSMA, 'Daily New Cases', '7 day Moving Average')
@@ -223,7 +223,7 @@ define(['../appController', 'knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarra
 function extractChartData (data, dataProp, seriesArray, seriesSMAArray, seriesName, seriesSMAName) {
   let i = data.length
   for (let i = data.length - 1; i >= 0; i--) {
-    if (data[i][dataProp] == null) continue
+    if (data[i][dataProp] == null || !data[i].dateChecked) continue
     let sma = -1
     if (i < data.length - 6) {
       if (data[i + 1][dataProp] != null && data[i + 2][dataProp] != null && data[i + 3][dataProp] != null && data[i + 4][dataProp] != null
