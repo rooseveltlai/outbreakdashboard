@@ -172,7 +172,7 @@ define(['../appController','knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarray
       }
 
       function loadCharts (state) {
-        let url = `/api/v1/${state != 'US' ? ('states.toLowerCase()/' + state.toLowerCase()) : 'us'}/daily.json`
+        let url = `/api/v1/${state != 'US' ? ('states/' + state.toLowerCase()) : 'us'}/daily.json`
         return $.getJSON(url, function (data) {
           let dailyNewCases = []
           let dailyNewTests = []
