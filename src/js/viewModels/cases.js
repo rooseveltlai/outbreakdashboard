@@ -46,10 +46,10 @@ define(['../appController', 'knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarra
       function loadTableData () {
         app.loading(true)
 
-        let url = `https://covidtracking.com/api/v1/states/daily.json`
+        let url = `/api/v1/states/daily.json`
         let promise1 = $.getJSON(url)
 
-        let usUrl = `https://covidtracking.com/api/v1/us/daily.json`
+        let usUrl = `/api/v1/us/daily.json`
         let promise2 = $.getJSON(usUrl)
 
         $.when(promise1, promise2).then(function (dataState, dataUSA) {

@@ -98,7 +98,7 @@ define(['../appController', 'knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarra
       }
 
       function loadState () {
-        $.getJSON('https://covidtracking.com/api/v1/states/info.json', function (data) {
+        $.getJSON('/api/v1/states/info.json', function (data) {
           let stateList = []
           stateList.push({
             value: 'USA',
@@ -144,7 +144,7 @@ define(['../appController', 'knockout', 'jquery', 'ojs/ojbootstrap', 'ojs/ojarra
         self.totalDeath = []
         self.totalDeathSMA = []
 
-        let url = `https://covidtracking.com/api/v1/${state != 'us' ? ('states/' + state.toLowerCase()) : state.toLowerCase()}/daily.json`
+        let url = `/api/v1/${state != 'us' ? ('states/' + state.toLowerCase()) : state.toLowerCase()}/daily.json`
         $.getJSON(url, function (data) {
           data = preprocessData(data)
           extractChartData(data, 'positiveIncrease', self.dailyNewCases, self.dailyNewCasesSMA, 'Daily New Cases', '7 day Moving Average')
